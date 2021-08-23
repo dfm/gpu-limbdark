@@ -109,7 +109,7 @@ def _kepler_translation(c, mean_anom, ecc, *, platform="cpu"):
     elif platform == "gpu":
         if gpu_ops is None:
             raise ValueError(
-                "The 'kepler_jax' module was not compiled with CUDA support"
+                "The 'jax_limbdark' module was not compiled with CUDA support"
             )
 
         # On the GPU, we do things a little differently and encapsulate the
@@ -125,9 +125,7 @@ def _kepler_translation(c, mean_anom, ecc, *, platform="cpu"):
             opaque=opaque,
         )
 
-    raise ValueError(
-        "Unsupported platform; this must be either 'cpu' or 'gpu'"
-    )
+    raise ValueError("Unsupported platform; this must be either 'cpu' or 'gpu'")
 
 
 # **********************************
@@ -157,8 +155,7 @@ def _kepler_jvp(args, tangents):
 
     # Propagate the derivatives
     d_ecc_anom = (
-        zero_tangent(d_mean_anom, mean_anom)
-        + zero_tangent(d_ecc, ecc) * sin_ecc_anom
+        zero_tangent(d_mean_anom, mean_anom) + zero_tangent(d_ecc, ecc) * sin_ecc_anom
     ) / (1 - ecc * cos_ecc_anom)
 
     return (sin_ecc_anom, cos_ecc_anom), (

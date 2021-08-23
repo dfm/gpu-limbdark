@@ -6,7 +6,7 @@
 #include "kernel_helpers.h"
 #include "kernels.h"
 
-namespace kepler_jax {
+namespace jax_limbdark {
 
 namespace {
 
@@ -56,4 +56,4 @@ void gpu_kepler_f64(cudaStream_t stream, void **buffers, const char *opaque,
   apply_kepler<double>(stream, buffers, opaque, opaque_len);
 }
 
-}  // namespace kepler_jax
+}  // namespace jax_limbdark

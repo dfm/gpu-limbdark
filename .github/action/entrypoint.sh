@@ -1,6 +1,6 @@
 #!/bin/sh -l
 
 cd /github/workspace
-KEPLER_JAX_CUDA=yes python3 -m pip install .
-python3 -c 'import kepler_jax;print(kepler_jax.__version__)'
-python3 -c 'import kepler_jax.gpu_ops'
+JAX_LIMBDARK_CUDA=yes python3 -m pip install .
+python3 -c 'import jax_limbdark;print(jax_limbdark.__version__)'
+python3 -c 'import jax_limbdark.gpu_ops'

@@ -7,7 +7,7 @@ import jax
 from jax.config import config
 from jax.test_util import check_grads
 
-from kepler_jax import kepler
+from jax_limbdark import kepler
 
 
 config.update("jax_enable_x64", True)

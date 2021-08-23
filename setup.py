@@ -47,27 +47,21 @@ class CMakeBuildExt(build_ext):
             )
         cmake_python_include_dir = distutils.sysconfig.get_python_inc()
 
-        install_dir = os.path.abspath(
-            os.path.dirname(self.get_ext_fullpath("dummy"))
-        )
+        install_dir = os.path.abspath(os.path.dirname(self.get_ext_fullpath("dummy")))
         os.makedirs(install_dir, exist_ok=True)
         cmake_args = [
             "-DCMAKE_INSTALL_PREFIX={}".format(install_dir),
             "-DPython_EXECUTABLE={}".format(sys.executable),
             "-DPython_LIBRARIES={}".format(cmake_python_library),
             "-DPython_INCLUDE_DIRS={}".format(cmake_python_include_dir),
-            "-DCMAKE_BUILD_TYPE={}".format(
-                "Debug" if self.debug else "Release"
-            ),
+            "-DCMAKE_BUILD_TYPE={}".format("Debug" if self.debug else "Release"),
             "-DCMAKE_PREFIX_PATH={}".format(pybind11.get_cmake_dir()),
         ]
-        if os.environ.get("KEPLER_JAX_CUDA", "no").lower() == "yes":
-            cmake_args.append("-DKEPLER_JAX_CUDA=yes")
+        if os.environ.get("JAX_LIMBDARK_CUDA", "no").lower() == "yes":
+            cmake_args.append("-DJAX_LIMBDARK_CUDA=yes")
 
         os.makedirs(self.build_temp, exist_ok=True)
-        subprocess.check_call(
-            ["cmake", HERE] + cmake_args, cwd=self.build_temp
-        )
+        subprocess.check_call(["cmake", HERE] + cmake_args, cwd=self.build_temp)
 
         # Build all the extensions
         super().build_extensions()
@@ -88,33 +82,30 @@ class CMakeBuildExt(build_ext):
 
 extensions = [
     Extension(
-        "kepler_jax.cpu_ops",
-        ["src/kepler_jax/src/cpu_ops.cc"],
+        "jax_limbdark.cpu_ops",
+        ["src/jax_limbdark/src/cpu_ops.cc"],
     ),
 ]
 
-if os.environ.get("KEPLER_JAX_CUDA", "no").lower() == "yes":
+if os.environ.get("JAX_LIMBDARK_CUDA", "no").lower() == "yes":
     extensions.append(
         Extension(
-            "kepler_jax.gpu_ops",
+            "jax_limbdark.gpu_ops",
             [
-                "src/kepler_jax/src/gpu_ops.cc",
-                "src/kepler_jax/src/cuda_kernels.cc.cu",
+                "src/jax_limbdark/src/gpu_ops.cc",
+                "src/jax_limbdark/src/cuda_kernels.cc.cu",
             ],
         )
     )
 
 
 setup(
-    name="kepler_jax",
+    name="jax_limbdark",
     author="Dan Foreman-Mackey",
     author_email="foreman.mackey@gmail.com",
-    url="https://github.com/dfm/extending-jax",
+    url="https://github.com/dfm/jax-limbdark",
     license="MIT",
-    description=(
-        "A simple demonstration of how you can extend JAX with custom C++ and "
-        "CUDA ops"
-    ),
+    description=("GPU limb darkening with JAX"),
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
     packages=find_packages("src"),
